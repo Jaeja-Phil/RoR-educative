@@ -15,3 +15,5 @@
 </p>
 
 <%= link_to 'Home', pets_path %>
+<%= link_to 'Edit', edit_pet_path %>
+<%= link_to 'Remove', @pet, method: :delete, data: { confirm: 'Are you sure?' } %>
