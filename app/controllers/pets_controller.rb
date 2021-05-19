@@ -19,7 +19,7 @@ class PetsController < ApplicationController
     # :pet --> has attributes that we are interested in
     # due to built-in security features of rails, you must specify which param to permit
     # and they are name, age and description in this case
-    @pet = Pet.new(params.require(:pet).permit(:name, :age, :description))
+    @pet = Pet.new(pet_params)
     if @pet.save
       # redict to the pets#show
       # same as rediect_to pet_path(@pet)
@@ -30,13 +30,18 @@ class PetsController < ApplicationController
     end
   end
 
-  def update
-    @pet = Pet.find(params[:id])
-    @pet.update(params.require(:pet).permit(:name, :age, :description))
-  end
-
   def edit
     @pet = Pet.find(params[:id])
+  end
+
+  def update
+    @pet = Pet.find(params[:id])
+    
+    if @pet.update(pet_params)
+      redirect_to @pet
+    else
+      render 'edit'
+    end
   end
 
   def destroy
@@ -45,4 +50,9 @@ class PetsController < ApplicationController
 
     redirect_to pets_path
   end
+
+  private
+    def pet_params
+      params.require(:pet).permit(:name, :age, :description)
+    end
 end
